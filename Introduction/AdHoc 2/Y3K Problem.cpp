@@ -1,17 +1,5 @@
-#ifndef ADHOC_H
-#define ADHOC_H
-
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-typedef pair<int, int> ii;
-// are aligned to the right like this
-typedef vector<ii> vii;
-typedef vector<int> vi;
-#define INF 1000000000
-// 1 billion, safer than 2B for Floyd Warshall’s
-//memset(memo, -1, sizeof memo); // initialize DP memoization table with -1
-//memset(arr, 0, sizeof arr);
 
 class Date{
 public:
@@ -36,5 +24,13 @@ public:
 	}
 };
 
-
-#endif
+int main(){
+	ifstream cin("in.txt");
+	ofstream cout("out.txt");
+	int n, d, m, y;
+	while(cin >> n >> d >> m >> y, n||d||m||y){
+		Date current(d, m, y);
+		current.newDate(n);
+		cout << current.day << " " << current.month << " " << current.year << endl;
+	}
+}
