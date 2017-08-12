@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void print(int d, int m, ofstream &cout){
+void print(int d, int m, ostream &cout){
 	if(m == 1 && d>=21 || m==2 && d<=19) cout << "aquarius" << endl;
 	if(m == 2 && d>=20 || m==3 && d<=20) cout << "pisces" << endl;
 	if(m == 3 && d>=21 || m==4 && d<=20) cout << "aries" << endl;
