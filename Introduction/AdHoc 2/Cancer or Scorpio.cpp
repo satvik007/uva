@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -83,4 +82,3 @@ int main(){
 		print(current.tm_mday, current.tm_mon+1, cout);
 	}
 }
->>>>>>> 89576f1b64d092eb1d7a4e3b971f43cbe31166e2
