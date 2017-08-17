@@ -3,8 +3,8 @@ using namespace std;
 typedef vector <int> vi;
 // ‘r’, ‘k’, ‘Q’, ‘K’
 int main(){
-	ifstream cin ("in.txt");
-	ofstream cout ("out.txt");
+	//ifstream cin ("in.txt");
+	//ofstream cout ("out.txt");
 	int t;
 	cin >> t;
 	while(t--){
