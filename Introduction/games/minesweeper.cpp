@@ -2,8 +2,8 @@
 using namespace std;
 
 int main(){
-    ifstream cin("in.txt");
-    ofstream cout("out.txt");
+    //ifstream cin("in.txt");
+    //ofstream cout("out.txt");
     int n, m;
     int cas = 1;
     while (cin >> n >> m, n||m){
