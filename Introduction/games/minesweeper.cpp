@@ -7,7 +7,7 @@ int main(){
     int n, m;
     int cas = 1;
     while (cin >> n >> m, n||m){
-        //if(cas != 1) cout << endl;
+        if(cas != 1) cout << endl;
         vector <string> a(n);
         for(int i=0; i<n; i++) cin >> a[i];
         for(int i=0; i<n; i++){
@@ -33,7 +33,7 @@ int main(){
         for(int i=0; i<n; i++){
             cout << a[i] << endl;
         }
-        cout << endl;
+        //cout << endl;
         cas++;
     }
     return 0;
