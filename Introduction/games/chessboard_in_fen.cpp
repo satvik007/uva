@@ -109,7 +109,7 @@ int main(){
 	//ofstream cout("out.txt");
 	string a;
 	while(cin >> a){
-		n = count(a.begin(), a.end(), '/') + 1;
+		//n = count(a.begin(), a.end(), '/') + 1;
 		//cout << n << endl;
 		piece.resize(n);
 		status.resize(n, vector <int> (m));
