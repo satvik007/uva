@@ -85,7 +85,7 @@ void pawn(int row, int col, int color){
 	}
 	else {
 		if(row-1>=0 && col+1<m) status[row-1][col+1] = true;
-		if(row-1>=0 && col-1<m) status[row-1][col-1] = true;
+		if(row-1>=0 && col-1>=0) status[row-1][col-1] = true;
 	}
 	return;
 }
