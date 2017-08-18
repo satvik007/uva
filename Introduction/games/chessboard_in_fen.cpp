@@ -3,8 +3,9 @@ using namespace std;
 typedef vector <int> vi;
 
 vector <string> piece;
-vector <vector <bool>> status;
-int n;
+vector <vector <int>> status;
+int n = 8;
+//int n;
 int m = 8;
 
 void rook(int row, int col){
@@ -51,17 +52,67 @@ void king(int row, int col){
 	if(row-1>=0 && col-1>=0) status[row-1][col-1] = true;
 	return;
 }
+void bishop(int row, int col){
+	status[row][col] = true;
+	for(int i=row+1; col-row+i<m && i<n; i++){
+		if(piece[i][col-row+i] != '0') break;
+		status[i][col-row+i] = true;
+	}
+	for(int i=row-1; col-row+i>=0 && i>=0; i--){
+		if(piece[i][col-row+i] != '0') break;
+		status[i][col-row+i] = true;
+	}
+	for(int i=row+1; col+row-i>=0 && i<n; i++){
+		if(piece[i][col+row-i] != '0') break;
+		status[i][col+row-i] = true;
+	}
+	for(int i=row-1; col+row-i<m && i>=0; i--){
+		if(piece[i][col+row-i] != '0') break;
+		status[i][col+row-i] = true;
+	}
+	return;
+}
 void queen(int row, int col){
-	status[row, col] = true;
-	
+	bishop(row, col);
+	rook(row, col);
+	return;
+}
+void pawn(int row, int col, int color){
+	status[row][col] = true;
+	if(color == 0){
+		if(row+1<n && col-1>=0) status[row+1][col-1] = true;
+		if(row+1<n && col+1<m) status[row+1][col+1] = true;
+	}
+	else {
+		if(row-1>=0 && col+1<m) status[row-1][col+1] = true;
+		if(row-1>=0 && col-1<m) status[row-1][col-1] = true;
+	}
+	return;
 }
 
+void printv(ostream &cout){
+	for(int i=0; i<n; i++){
+		for(int j=0; j<m; j++) cout << piece[i][j];
+		cout << endl;
+	}
+	cout << endl;
+}
+void print(ostream &cout){
+	for(int i=0; i<n; i++){
+		for(int j=0; j<m; j++) cout << status[i][j];
+		cout << endl;
+	}
+	cout << endl;
+}
 int main(){
+	//ifstream cin("in.txt");
+	//ofstream cout("out.txt");
 	string a;
 	while(cin >> a){
 		n = count(a.begin(), a.end(), '/') + 1;
+		//cout << n << endl;
 		piece.resize(n);
-		status.resize(n, vector <bool> (m));
+		status.resize(n, vector <int> (m));
 		for(int i=0; i<n; i++){
 			for(int j=0; j<m; j++){
 				piece[i][j] = '0';
@@ -74,8 +125,9 @@ int main(){
 		while(index != a.size()){
 			current = a[index];
 			if(current >= '1' && current <= '8') k+=current-'0'-1;
-			else if(current == '/');
+			else if(current == '/') k--;
 			else piece[k/8][k%8] = current;
+			assert(k/8<n && k%8<m);
 			k++;
 			index++;
 		}
@@ -92,6 +144,8 @@ int main(){
 				else if(current == 'P') pawn(i, j, 1);
 			}
 		}
+		//print(cout);
+		//printv(cout);
 		int counter = 0;
 		for(int i=0; i<n; i++){
 			for(int j=0; j<m; j++){
