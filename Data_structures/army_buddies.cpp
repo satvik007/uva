@@ -5,8 +5,8 @@ typedef vector <int> vi;
 int main(){
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ifstream cin("in.txt");
-	ofstream cout("out.txt");
+	//ifstream cin("in.txt");
+	//ofstream cout("out.txt");
 	int s, b;
 	while(cin >> s >> b, s||b){
 		vi left(s);
