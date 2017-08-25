@@ -1,15 +1,16 @@
-D is the counterfeit coin and it is light.
-J is the counterfeit coin and it is heavy.
-A is the counterfeit coin and it is heavy.
-E is the counterfeit coin and it is light.
-L is the counterfeit coin and it is heavy.
-C is the counterfeit coin and it is light.
-F is the counterfeit coin and it is light.
-F is the counterfeit coin and it is heavy.
-L is the counterfeit coin and it is light.
-A is the counterfeit coin and it is heavy.
-A is the counterfeit coin and it is heavy.
-A is the counterfeit coin and it is heavy.
-A is the counterfeit coin and it is light.
-A is the counterfeit coin and it is light.
-A is the counterfeit coin and it is light.
+10 4
+2 5
+6 9
+1 1
+10 10
+5 1
+1 1
+0 0
+
+1 6
+1 10
+* 10
+* *
+-
+* 2
+-
