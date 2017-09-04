@@ -10,26 +10,55 @@ int main(){
 	//ofstream cout("out.txt");
 	int t;
 	cin >> t;
-	int n;
+	int n, greenSize, blueSize;
 	while(t--){
-		cin >> n;
-		vi a(n);
-		map <int, int> map1;
-		for(int i=0; i<n; i++) cin >> a[i];
-		int max1 = -1;
-		int last = 0;
-		int flag = 0;
-		for(int i=0; i<n; i++){
-			if(i-last > max1) max1 = i-last;
-			if(map1.find(a[i]) == map1.end());
-			else if(map1[a[i]] >= last){
-				flag = 1;
-				last = map1[a[i]]+1;
-			}
-			map1[a[i]] = i;
+		cin >> n >> greenSize >> blueSize;
+		int temp;
+		multiset <int, greater <int> > a;
+		multiset <int, greater <int> > b;
+		for(int i=0; i<greenSize; i++){
+			cin >> temp;
+			a.insert(temp);
 		}
-		if(n-last > max1) max1 = n-last;
-		cout << max1 << "\n";
+		for(int i=0; i<blueSize; i++){
+			cin >> temp;
+			b.insert(temp);
+		}
+		while(!a.empty() && !b.empty()){
+			int size = min(a.size(), b.size());
+			size = min(size, n);
+			vi x(size), y(size);
+			for(int i=0; i<size; i++){
+				x[i] = (*a.begin()); a.erase(a.begin());
+				y[i] = (*b.begin()); b.erase(b.begin());
+				if(x[i]>y[i]) {
+					x[i] -= y[i]; y[i] = 0;
+				}
+				else{
+					y[i] -= x[i]; x[i] = 0;
+				}
+			}
+			//for(auto el:x) cout << el << " "; cout << endl;
+			//for(auto el:y) cout << el << " "; cout << endl;
+			for(int i=0; i<size; i++){
+				if(x[i] > 0) a.insert(x[i]);
+				if(y[i] > 0) b.insert(y[i]);
+			}
+			//for(auto el:a) cout << el << " "; cout << endl;
+			//for(auto el:b) cout << el << " "; cout << endl;
+		}
+		if(a.empty()){
+			if(b.empty()) cout << "green and blue died\n";
+			else {
+				cout << "blue wins\n";
+				for(auto el: b) cout << el << "\n";
+			}
+		}
+		else {
+			cout << "green wins\n";
+			for(auto el: a) cout << el << "\n";
+		}
+		if(t!=0) cout << "\n";
 	}
 	return 0;
 }
