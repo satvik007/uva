@@ -1,11 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-typedef pair<int, int> ii;
-typedef vector <ii> vii;
 typedef vector <int> vi;
 
-map <string, int> map1;
+unordered_map <string, int> map1;
 
 class UnionFind { // OOP style
 private: vi p, rank; // remember: vi is vector<int>
