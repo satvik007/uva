@@ -10,36 +10,7 @@ typedef vector<int> vi;
 //memset(memo, -1, sizeof memo); // initialize DP memoization table with -1
 //memset(arr, 0, sizeof arr);
 
-// halim
-class UnionFind {
-private: vi p, rank;
-public:
-	UnionFind(int N) { 
-		rank.assign(N, 0);
-		p.assign(N, 0); 
-		for (int i = 0; i < N; i++) p[i] = i; 
-	}
-	int findSet(int i) { 
-		return (p[i] == i) ? i : (p[i] = findSet(p[i])); 
-	}
-	bool isSameSet(int i, int j) { 
-		return findSet(i) == findSet(j); 
-	}
-	void unionSet(int i, int j) {
-		if (!isSameSet(i, j)) {
-			// if from different set
-			int x = findSet(i), y = findSet(j);
-			if (rank[x] > rank[y]) p[y] = x;
-			// rank keeps the tree short
-			else {
-				p[x] = y;
-				if (rank[x] == rank[y]) rank[y]++; 
-			}
-		} 		
-	} 
-};
-
-class MyUnionFind { // OOP style
+class UnionFind { // OOP style
 private: vi p, rank; // remember: vi is vector<int>
 public:
 	UnionFind(int N) { 
@@ -48,13 +19,7 @@ public:
 		for (int i = 0; i < N; i++) p[i] = i; 
 	}
 	int findSet(int i) { 
-		int start = i, temp;
-		while(i != p[i]) i = p[i];
-		while(start != p[start]){
-			temp = p[start];
-			p[start] = i;
-			start = temp;
-		}	
+		while(i != p[i]) p[i] = p[p[i]], i = p[i];	
 		return i; 
 	}
 	bool isSameSet(int i, int j) { 
