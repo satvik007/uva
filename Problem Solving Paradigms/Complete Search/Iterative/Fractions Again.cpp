@@ -8,8 +8,8 @@ typedef vector <ll> vll;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    freopen("in.txt", "r", stdin);
-    freopen("out.txt", "w", stdout);
+    //freopen("in.txt", "r", stdin);
+    //freopen("out.txt", "w", stdout);
     int k;
     double one = 1.0;
     while(cin >> k){

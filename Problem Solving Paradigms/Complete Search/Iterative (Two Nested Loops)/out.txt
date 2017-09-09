@@ -1,0 +1,7 @@
+Case 1:
+Closest sum to 3 is 4.
+Closest sum to 4 is 4.
+Closest sum to 5 is 4.
+Closest sum to 6 is 4.
+Closest sum to 10 is 10.
+Closest sum to 12 is 11.
