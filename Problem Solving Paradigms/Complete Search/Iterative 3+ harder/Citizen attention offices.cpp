@@ -6,8 +6,8 @@ typedef vector <int> vi;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    freopen("in.txt", "r", stdin);
-    freopen("out.txt", "w", stdout);
+    //freopen("in.txt", "r", stdin);
+    //freopen("out.txt", "w", stdout);
     int t, u, v, w, size = 25, counter, n, min1;
     cin >> t;
     vi a(25);
