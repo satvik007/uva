@@ -1,28 +1,20 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef vector <int> vi;
 typedef long long ll;
+typedef vector <int> vi;
 
+int n, k, counter, min1, ans;
 vi a;
-int max1, n, counter, k;
-int ans;
-unsigned int countSetBits(int n)
-{
-    unsigned int count = 0;
-    while (n)
-    {
-      n &= (n-1) ;
-      count++;
-    }
-    return count;
-}
-void jeffDean(int u, int mask){
-    if(abs(u-k) < max1 ) max1 = abs(u-k), ans = mask;
-    for(int i=0; i<n; i++){
-        if(!(mask & (1<<i))) jeffDean(u+a[i], mask|(1<<i));
-    }
-}
 
+void solve(int u, int mask, int r){
+    if(u > k || min1 == 0) return;
+    if(k - u < min1){
+    	min1 = k-u; ans = mask;
+	} 
+    for(int i=r; i<n; i++){
+        solve(u+a[i], mask | (1<<i), i+1);
+    }
+}
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -30,10 +22,15 @@ int main(){
     freopen("out.txt", "w", stdout);
     while(cin >> k >> n){
         a.resize(n);
+        min1 = k;
         for(int i=0; i<n; i++) cin >> a[i];
-        max1 = INT_MAX;
-        jeffDean(0, 0);
-        cout << countSetBits(ans) << "\n";
+        solve(0, 0, 0);
+        counter = 0;
+        for(int i=0; i<n; i++){
+            if(ans & (1<<i)){
+            	counter += a[i]; cout << a[i] << " ";
+			} 
+        }
+        cout << "sum:" << counter << "\n";
     }
-    return 0;
 }
