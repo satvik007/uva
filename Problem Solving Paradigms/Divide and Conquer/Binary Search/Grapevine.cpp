@@ -6,8 +6,8 @@ typedef long long ll;
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    freopen("in.txt", "r", stdin);
-    freopen("out.txt", "w", stdout);
+    //freopen("in.txt", "r", stdin);
+    //freopen("out.txt", "w", stdout);
     int n, m, q, u, v, index, len, hi, curr, row, col, max1, current;
     vector <vi> a;
     vector <pair<int, int>> b;
