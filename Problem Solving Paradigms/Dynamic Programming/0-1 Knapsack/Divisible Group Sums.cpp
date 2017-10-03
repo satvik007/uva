@@ -40,3 +40,14 @@ int main(){
     }
     return 0;
 }
+/*
+state:
+    dp[i][j][k] - how many ways to select j numbers from i numbers, and with remainder k when the sum of those j numbers divides d
+
+transition:
+    dp[i][j][k]=dp[i-1][j][k]+dp[i-1][j-1][K], K equals the remainder before we select number j
+
+this dp transition looks just like the one used to generate combination table:
+    dp[i][j]=dp[i-1][j-1]+dp[i-1][j]
+which also can generate the famous pascal's triangle...
+*/
