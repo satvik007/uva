@@ -1,2 +1,2 @@
 # uva
-Meant for storing uva solutions.
+Meant for storing solutions submitted on uva Online Judje.
