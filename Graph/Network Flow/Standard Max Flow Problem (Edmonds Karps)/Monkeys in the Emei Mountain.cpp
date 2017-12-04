@@ -1,21 +1,21 @@
-/* There are 50000 time nodes which can be compressed on the basis on how they appear in 
-   the data that comes. eg. 
+/* There are 50000 time nodes which can be compressed on the basis on how they appear in
+   the data that comes. eg.
    1 2 4
    2 5 9
    1 3 8
    is the data then the ranges are:
-   
+
    2-3, 3-4, 4-5, 5-8, 8-9.
-   
+
    We assign flow from source to animals as what the animal requires. (res[0][i+2])
    We assign flow from animals to any range as (right val - left val) (res[i+2][n+2+index])
    From any range to target as m*(right val - left val). The max capacity it can support.
    As 1 time slot supports m so (rv - lv) supports m*(rv - lv). (res[n+2+i][1])
- 
+
    Then we apply Edmond Karp algorithm - pretty standard code.
    res[j][i] represents the flow to be represented in the compressed range.
-   For writing the ranges we first fill the relatively less used blocks first and then 
-   if more are required we fill from the left.
+   For writing the ranges we first fill the relatively less used blocks first and then
+   if more are required we fill from the left using pivot as tracker.
 */
 
 
@@ -31,7 +31,7 @@ public:
 };
 
 int n, m, f, mf, total, s, t, cnt, cas = 1, r;
-int used[50005], times[50005], res[320][320];
+int used[50005], times[500], pivot[500], res[320][320];
 vi names, p, ans;
 vector <Data> store;
 
@@ -91,6 +91,7 @@ int main(){
         }
         cnt = names.size();
         for(int i=0; i<names.size()-1; i++){
+            pivot[i] = names[i];
             res[n+2+i][1] = m*(names[i+1] - names[i]);
         }
         EdmondKarp();
@@ -98,7 +99,7 @@ int main(){
         if(mf == total){
             cout << "Yes\n";
             int left, right, flag, index, mid;
-            for(int i=0; i<50001; i++) times[i] = m;
+            //for(int i=0; i<50001; i++) times[i] = m;
             for(int i=2; i<n+2; i++){
                 ans.clear();
                 for(int j=n+2; j<n+2+cnt; j++){
@@ -106,36 +107,22 @@ int main(){
                     if(res[j][i] > 0) {
                         left = names[j - n - 2];
                         right = names[j - n - 1];
-                        // Uncommenting the below line will show the current capacities for this range.
-                        //for(int k=left; k<right; k++) cout << times[k]; cout << endl;
-                        // The entire compressed range is being used.
                         if (res[j][i] == (right - left)) {
                             if (!ans.empty() && ans.back() == left) ans.back() = right;
                             else ans.push_back(left), ans.push_back(right);
-                            for (int k = left; k < right; k++){times[k]--;}// if(times[k] < 0) cout << "\nSomething is wrong.\n";}
                             continue;
                         }
-                        // Finding the pivot where the right side has higher water capacity than the left.
-                        index = left;
-                        for (int k = left; k < right - 1; k++) {
-                            if (times[k] < times[k + 1]) {
-                                index = k + 1;
-                                break;
-                            }
-                        }
-                        // if the relatively unused states are not enough we will need to fill from the start of 
-                        // the range as well.
+                        index = pivot[j-n-2];
                         if (right - index < res[j][i]) {
                             mid = left + res[j][i] - (right - index);
                             if (!ans.empty() && ans.back() == left) ans.back() = mid;
                             else ans.push_back(left), ans.push_back(mid);
                             ans.push_back(index); ans.push_back(right);
-                            for (int k = left; k < mid; k++){times[k]--;}// if(times[k] < 0) cout << "\nSomething is wrong.\n";}
-                            for (int k = index; k < right; k++){times[k]--;}// if(times[k] < 0) cout << "\nSomething is wrong.\n";}
+                            pivot[j-n-2] = mid;
                         } else {
                             if(!ans.empty() && ans.back() == index) ans.back() = index+res[j][i];
                             else ans.push_back(index), ans.push_back(index + res[j][i]);
-                            for (int k = index; k < index + res[j][i]; k++){times[k]--;}// if(times[k] < 0) cout << "\nSomething is wrong.\n";}
+                            pivot[j-n-2] = (index + res[j][i] == right) ? left : (index + res[j][i]);
                         }
                     }
                 }
