@@ -363,92 +363,50 @@ struct bigint {//loading our bigint library
         res.trim();
         return res;
     }
-    string to_string(const bigint &v){
-        string ans;
-        if (v.sign == -1)
-            ans += '-';
-        ans +=  (v.a.empty() ? "0" : to_string(v.a.back()));
-        for (int i = (int) v.a.size() - 2; i >= 0; --i){
-            string current = to_string(v.a[i]);
-            if(current.size() , base_digits){
-                string zeroes(base_digits - current.size(), '0');
-                current = zeroes + current;
-            }
-        ans += current;
-        }
-        return ans;
-    }
 };
 bigint gcd(const bigint &a, const bigint &b) {
     return b.isZero() ? a : gcd(b, a % b);
 }
-bigint fib[151];
-bigint convFibtoDec(string a)
-{
-    bigint num;
-    num = 0;
-    reverse(a.begin(),a.end());
-    for(int i = 0;i<a.size();i++)
-    {
-        if(a[i]=='1')
-        {
-            num = num + fib[i+1];
-        }
-    }
-    return num;
-}
-string convDecToFib(bigint a,bigint b)
-{
-    bigint ans = a + b;
-    string fans;
-    for(int i = 0; i<200;i++) fans.push_back('0');
-    for(int i = 150;i>=1;i--)
-    {
-        if(fib[i]<=ans)
-        {
-            ans = ans - fib[i];
-            fans[i-1] = '1';
 
-        }
+string solve(bigint n, const vector <bigint> &fib){
+    if(n == 0) return "0";
+    if(n == 1) return "1";
+    string ans;
+    int index = upper_bound(fib.begin(), fib.end(), n) - fib.begin();
+    ans.resize(index);
+    for(int i=0; i<ans.size(); i++) ans[i] = '0';
+    while(n != 0){
+        index = upper_bound(fib.begin(), fib.end(), n) - fib.begin();
+        ans[ans.size()-index] = '1';
+        n -= fib[index-1];
     }
-    while(fans[fans.size()-1]!='1') fans.pop_back();
-    reverse(fans.begin(),fans.end());
-    return fans;
+    return ans;
 }
-int main() {
 
-    ios::sync_with_stdio(0);
-    //cin.tie(0);
-    //FileIn("in");
-    //FileOut("out");
-    fib[0]=1;
-    fib[1]=1;
-    for(int i=2;i<151;i++)
-    {
-        fib[i]=fib[i-1]+fib[i-2];
+bigint find(string a, const vector <bigint> &fib){
+    bigint res = 0;
+    for(int i=0; i<a.size(); i++){
+        res += fib[i] * (a[a.size()-i-1] - '0');
     }
-    int n;
-    string a,b;
-    bool first = true;
-    while(cin>>a>>b)
-    {
-        if(first) first = false;
-        else cout<<'\n';
-        if(a=="0")
-        {
-            cout<<b<<'\n';
-            continue;
-        }
-        else if(b=="0")
-        {
-            cout<<a<<'\n';
-            continue;
-        }
-        bigint na = convFibtoDec(a);
-        bigint nb = convFibtoDec(b);
-        string ans = convDecToFib(na,nb);
-        cout<<ans<<'\n';
+    return res;
+}
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    freopen("in.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
+    string u, v;
+    vector <bigint> fib(150);
+    fib[0] = 1; fib[1] = 2;
+    for(int i=2; i<150; i++) fib[i] = fib[i-1] + fib[i-2];
+    int cas = 1;
+    while(cin >> u >> v){
+        if(cas != 1) cout << "\n"; cas++;
+        bigint n = find(u, fib), m = find(v, fib);
+        //cout << n << " " << m << " " << (n+m) << endl;
+        string ans = solve(n+m, fib);
+        //cout << find(ans, fib) << endl;
+        cout << ans << endl;
     }
     return 0;
 }
-

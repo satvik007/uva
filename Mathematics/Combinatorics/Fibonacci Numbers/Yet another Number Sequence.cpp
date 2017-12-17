@@ -363,92 +363,26 @@ struct bigint {//loading our bigint library
         res.trim();
         return res;
     }
-    string to_string(const bigint &v){
-        string ans;
-        if (v.sign == -1)
-            ans += '-';
-        ans +=  (v.a.empty() ? "0" : to_string(v.a.back()));
-        for (int i = (int) v.a.size() - 2; i >= 0; --i){
-            string current = to_string(v.a[i]);
-            if(current.size() , base_digits){
-                string zeroes(base_digits - current.size(), '0');
-                current = zeroes + current;
-            }
-        ans += current;
-        }
-        return ans;
-    }
 };
 bigint gcd(const bigint &a, const bigint &b) {
     return b.isZero() ? a : gcd(b, a % b);
 }
-bigint fib[151];
-bigint convFibtoDec(string a)
-{
-    bigint num;
-    num = 0;
-    reverse(a.begin(),a.end());
-    for(int i = 0;i<a.size();i++)
-    {
-        if(a[i]=='1')
-        {
-            num = num + fib[i+1];
-        }
-    }
-    return num;
-}
-string convDecToFib(bigint a,bigint b)
-{
-    bigint ans = a + b;
-    string fans;
-    for(int i = 0; i<200;i++) fans.push_back('0');
-    for(int i = 150;i>=1;i--)
-    {
-        if(fib[i]<=ans)
-        {
-            ans = ans - fib[i];
-            fans[i-1] = '1';
 
-        }
-    }
-    while(fans[fans.size()-1]!='1') fans.pop_back();
-    reverse(fans.begin(),fans.end());
-    return fans;
-}
-int main() {
-
-    ios::sync_with_stdio(0);
-    //cin.tie(0);
-    //FileIn("in");
-    //FileOut("out");
-    fib[0]=1;
-    fib[1]=1;
-    for(int i=2;i<151;i++)
-    {
-        fib[i]=fib[i-1]+fib[i-2];
-    }
-    int n;
-    string a,b;
-    bool first = true;
-    while(cin>>a>>b)
-    {
-        if(first) first = false;
-        else cout<<'\n';
-        if(a=="0")
-        {
-            cout<<b<<'\n';
-            continue;
-        }
-        else if(b=="0")
-        {
-            cout<<a<<'\n';
-            continue;
-        }
-        bigint na = convFibtoDec(a);
-        bigint nb = convFibtoDec(b);
-        string ans = convDecToFib(na,nb);
-        cout<<ans<<'\n';
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    freopen("in.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
+    int tc, a, b, n, m;
+    cin >> tc;
+    cout << setfill('0');
+    while(tc--){
+        cin >> a >> b >> n >> m;
+        vector <int> fib(15005);
+        fib[0] = a; fib[1] = b;
+        for(int i=2; i<=(n % 15000); i++) fib[i] = (fib[i-1] + fib[i-2]) % 100000;
+        string ans = to_string(fib[n % 15000]);
+        cout << (ans.size() <= m ? stoi(ans) : stoi(ans.substr(ans.size()-m))) << "\n";
     }
     return 0;
 }
-
