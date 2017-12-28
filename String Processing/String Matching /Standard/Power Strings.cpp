@@ -2,29 +2,31 @@
 using namespace std;
 typedef long long ll;
 typedef vector <int> vi;
-typedef pair <int, int> ii;
+
+string a;
+vi kmp;
+
+int kmpPreprocess(){
+    kmp.resize(a.size());
+    int i = 0, j = -1; kmp[0] = -1;
+    while(i < a.size()){
+        while(j >= 0 && a[i] != a[j]) j = kmp[j];
+        i++; j++;
+        kmp[i] = j;
+    }
+    return j;
+}
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     freopen("in.txt", "r", stdin);
     freopen("out.txt", "w", stdout);
-    string a;
     while(cin >> a, a != "."){
-        string u;
-        for(int i=1; i<=a.size(); i++){
-            if(a.size() % i) continue;
-            u = a.substr(0, i);
-            int flag = 1;
-            for(int j=0; j<a.size(); j++){
-                if(a[j] != u[j % u.size()]){
-                    flag = 0; break;
-                }
-            }
-            if(flag){
-                cout << (a.size() / i) << "\n"; break;
-            }
-        }
+        int t = kmpPreprocess();
+        int n = a.size();
+        if(n % (n - t) == 0) cout << (n / (n - t)) << endl;
+        else cout << "1\n";
     }
     return 0;
 }
