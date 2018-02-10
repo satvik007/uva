@@ -5,8 +5,6 @@ using namespace std;
 typedef long long ll;
 typedef vector <int> vi;
 
-// f(m) = m4 − 6m3 + 23m2 − 18m + 24
-//24
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
