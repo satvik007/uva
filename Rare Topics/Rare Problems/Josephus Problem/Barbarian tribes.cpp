@@ -19,7 +19,6 @@ int main(){
         bool flag = true;
         int last = 1;
         int current = -1;
-        //for(auto el:a) cout << el << " "; cout << endl;
         while(true){
             if(flag){
                 if(size == 1) break;
@@ -27,9 +26,7 @@ int main(){
                 current = (current + k) % size;
                 last = a[current];
                 a.erase(a.begin()+current);
-                //cout << 1 << " " << current << " - ";
                 size--; current--;
-                //for(auto el:a) cout << el << " "; cout << endl;
             }else{
                 flag = true;
                 current = (k + current) % size;
@@ -37,8 +34,6 @@ int main(){
                     a[current] = 1;
                 }else
                     a[current] = 2;
-                //cout << 2 << " " << current << " - ";
-                //for(auto el:a) cout << el << " "; cout << endl;
             }
         }
         if(a[0] == 1){
