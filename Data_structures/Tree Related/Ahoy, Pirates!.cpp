@@ -1,124 +1,121 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
+typedef vector <int> vi;
 
-#define L(x) (1 + ((x) << 1))
-#define R(x) (2 + ((x) << 1))
-int const MAXN = 1024000 + 2;
+#define maxn 1024010
 
-struct node {
-    node() {}
-    node(int b, int e, int m, int v)
-        : begin(b), end(e), mid(m), value(v) {}
-    int begin, end, mid, value;
-    char cmd;
-};
+int n;
+int a[maxn];
+int tree[4 * maxn], lazy[4 * maxn];
+map <char, int> map1;
 
-struct segment_tree {
-    vector<node> tree;
-
-    segment_tree(int size) {
-        tree = vector<node>(size << 2);
+class SegmentTree {
+public:
+    SegmentTree() {
+        memset(lazy, 0, sizeof lazy);
+        build(1, 0, n-1);
     }
-
-    void init_tree(int index, int left, int right, bool values[]) {
-        node& now = tree[index];
-        now.begin = left, now.end = right;
-        now.mid = (now.begin + now.end) >> 1;
-        now.cmd = ' ';
-        if (now.begin != now.end) {                 // get the values of the children
-            init_tree(L(index), left, now.mid, values);
-            init_tree(R(index), now.mid + 1, right, values);
-            now.value = tree[L(index)].value + tree[R(index)].value;    // add the values of the children to the current node
-        } else
-            now.value = values[now.begin];
+    int build(int p, int l, int r) {
+        if(l == r) return tree[p] = a[l];
+        return tree[p] = build(left(p), l, (l+r)/2) + build(right(p), (l+r)/2+1, r);
     }
-
-    void set_node_update(int index, char cmd) {
-        node& now = tree[index];
-        if (cmd == 'I') {
-            switch (now.cmd) {
-                case 'E': now.cmd = 'F'; break;
-                case 'F': now.cmd = 'E'; break;
-                case 'I': now.cmd = ' '; break;
-                case ' ': now.cmd = 'I'; break;
-            }
-        } else
-            now.cmd = cmd;
+    int query(int p, int l, int r, int i, int j) {
+        slide(p, l, r);
+        if (r < i || l > j) return 0;
+        if (l >= i && r <= j) return tree[p];
+        return query(left(p), l, (l + r) / 2, i, j) + query(right(p), (l + r) / 2 + 1, r, i, j);
     }
-
-    void apply_update_values(int index) {
-        node& now = tree[index];
-        switch (now.cmd) {
-            case 'E': now.value = 0; break;
-            case 'F': now.value = now.end - now.begin + 1; break;
-            case 'I': now.value = now.end - now.begin + 1 - now.value; break;
-            case ' ': return;
+    int update(int p, int l, int r, int i, int j, int change) {
+        slide(p, l, r);
+        if(l > j || r < i) return tree[p];
+        if(l >= i && r <= j) {
+            lazy[p] = change;
+            slide(p, l, r);
+            return tree[p];
         }
-        set_node_update(L(index), now.cmd);
-        set_node_update(R(index), now.cmd);
-        now.cmd = ' ';
+        return tree[p] = update(left(p), l, (l+r)/2, i, j, change) + update(right(p), (l+r)/2+1, r, i, j, change);
     }
-
-    void update(int index, int left, int right, char cmd) {
-        node& now = tree[index];
-        if (now.begin >= left && now.end <= right)        // fits in interval
-            set_node_update(index, cmd);                // update the command state
-        apply_update_values(index);                     // must apply the updates on all nodes even if it isn't on the interval
-        if (left > now.end || right < now.begin)      // doesn't fit in interval
-            return;
-        if (now.begin < left || now.end > right) {
-            update(L(index), left, right, cmd);
-            update(R(index), left, right, cmd);
-            now.value = tree[L(index)].value + tree[R(index)].value;
+    void slide(int p, int l, int r) {
+        switch(lazy[p]) {
+            case 0: break;
+            case 1: tree[p] = (r - l + 1); break;
+            case 2: tree[p] = 0; break;
+            case 3: tree[p] = (r - l + 1) - tree[p]; break;
         }
-    }
-
-    int query(int index, int left, int right) {
-        node& now = tree[index];
-        int result = 0;
-        apply_update_values(index);
-        if (now.begin >= left && now.end <= right) {
-            result = now.value;
-        } else if (left > now.end || right < now.begin) {
-            result = 0;
+        if(l == r) {
+            a[l] = tree[p];
         } else {
-            result = query(L(index), left, right) + query(R(index), left, right);
-            now.value = tree[L(index)].value + tree[R(index)].value;
+            force(left(p), l, (l+r)/2, lazy[p]);
+            force(right(p), (l+r)/2+1, r, lazy[p]);
         }
-        return result;
+        lazy[p] = 0;
     }
+    void force(int p, int l, int r, int change) {
+        if(change == 0);
+        else if(change == 1) lazy[p] = 1;
+        else if(change == 2) lazy[p] = 2;
+        else if(change == 3) lazy[p] = 3 - lazy[p];
+    }
+    void clear(int p, int l, int r) {
+        slide(p, l, r);
+        if(l != r) {
+            clear(left(p), l, (l+r)/2);
+            clear(right(p), (l+r)/2+1, r);
+        }
+    }
+    int left(int p) {return (p << 1);}
+    int right(int p) {return (p << 1 | 1);}
 };
 
-segment_tree tree(MAXN);
-char pirates[100];
-bool input[MAXN];
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    freopen("in.txt", "r", stdin);
+    freopen("out.txt", "w", stdout);
 
-int main(int argc, char **args) {
-    int TC; scanf("%d", &TC);
-    for (int T = 1; TC-- > 0; ++T) {
-        int M; scanf("%d", &M);
-        int size = 0;
-        while (M-- > 0) {
-            int times; scanf("%d", &times);
-            scanf("%s", pirates);
-            int n = strlen(pirates);
-            while (times-- > 0) {
-                for (int i = 0; i < n; ++i)
-                    input[size++] = pirates[i] == '1';
+    map1['F'] = 1;
+    map1['E'] = 2;
+    map1['I'] = 3;
+
+    int tc;
+    cin >> tc;
+
+    int cas = 1;
+
+    while(tc--) {
+        cout << "Case " << cas++ << ":\n";
+        int m;
+        cin >> m;
+        string s;
+        while(m--) {
+            int u; string v;
+            cin >> u >> v;
+            while(u--) s += v;
+        }
+        n = (int)s.size();
+        for(int i=0; i<n; i++) {
+            a[i] = s[i] - '0';
+        }
+
+        int q;
+        cin >> q;
+
+        int u, v;
+        char type;
+        int qnum = 1;
+
+        SegmentTree cur;
+
+        while(q--) {
+            cin >> type >> u >> v;
+            if(type == 'S') {
+                cout << "Q" << qnum++ << ": " << cur.query(1, 0, n-1, u, v) << "\n";
+            } else {
+                cur.update(1, 0, n-1, u, v, map1[type]);
             }
         }
-        tree.init_tree(0, 0, size - 1, input);
-        printf("Case %d:\n", T);
-        int query; scanf("%d", &query);
-        int answer_index = 0;
-        while (query-- > 0) {
-            char c; cin >> c;
-            int a, b; scanf("%d%d", &a, &b);
-            if (c == 'S')
-                printf("Q%d: %d\n", ++answer_index, tree.query(0, a, b));
-            else
-                tree.update(0, a, b, c);
-        }
     }
+
     return 0;
 }
