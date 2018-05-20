@@ -3,23 +3,27 @@ using namespace std;
 typedef vector <int> vi;
 typedef long long ll;
 
-ll n, lo, hi, u, v, one = 1;
+ll n, u, v;
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    //freopen("in.txt", "r", stdin);
-    //freopen("out.txt", "w", stdout);
-    while(cin >> n >> u >> v){
-        ll a = v;
-        int index = 31;
-        for(int i=31; i>=0; i--){
-            if(v & (one<<i)){ index = i; break;}
+ //   freopen("in.txt", "r", stdin);
+ //   freopen("out.txt", "w", stdout);
+
+    while(cin >> n >> u >> v) {
+        ll ans = 0;
+        for(int i = 31; i >= 0; i--) {
+            if(n & (1LL << i)) {
+                ll r = ans + (1LL << i);
+                if(r <= u) ans += (1LL << i);
+            } else {
+                ll r = ans + (1LL << i);
+                if(r <= v) ans += (1LL << i);
+            }
         }
-        for(int i=index; i>=0; i--){
-            if(!(n & (one << i)) && (a | (one << i)) <= v) a |= (one<<i);
-            if((n & (one<<i)) && (a & ~(one<<i)) >= u) a &= ~(one<<i);
-        }
-        cout << a << "\n";
+
+        cout << ans << "\n";
     }
+
 }
